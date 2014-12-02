@@ -445,6 +445,39 @@
       return this.saturate(-amount);
     };
 
+    Color.prototype.grayscale = function(amount, algorithm) {
+      var rgba, gray;
+      if(amount == null || typeof amount == 'string'){
+        amount = 1;
+        if(typeof amount == 'string'){
+          algorithm==amount;
+        }
+      }
+      if(algorithm == null || typeof algorithm == 'number') {
+        algorithm = 'average';
+        if(typeof algorithm == 'number'){
+          amount = algorithm;
+        }
+      }
+      if(amount<0){
+        amount = 0;
+      } else if(amount>1){
+        amount = 1;
+      }
+      rgba = this.rgba();
+      if(algorithm =='average'){
+        gray = (rgba[0]+rgba[1]+rgba[2])/3;
+      } 
+      else if( algorithm == 'luma'){
+        gray = rgba[0]*0.3+rgba[1]*0.59+rgba[2]*0.11;
+      }
+      rgba[0] = (rgba[0]*(1-amount))+(gray*amount);
+      rgba[1] = (rgba[1]*(1-amount))+(gray*amount);
+      rgba[2] = (rgba[2]*(1-amount))+(gray*amount);
+
+      return chroma(rgba);
+    }
+
     return Color;
 
   })();
